@@ -1,6 +1,6 @@
 # Projects Descriptions
 
-## [Unsupervised Generative AI] Comparative Study of cGAN, WGAN‑GP, and Diffusion Models
+## [Unsupervised Generative Models] Comparative Study of cGAN, WGAN‑GP, and Diffusion Models
 This project implements and compares three major generative modeling approaches—**Conditional GAN (cGAN)**, **Wasserstein GAN with Gradient Penalty (WGAN‑GP)**, and **Diffusion Models**—to understand how different architectures learn data distributions, handle conditioning, and produce synthetic images.
 
 All models are trained on the same dataset under consistent settings to highlight differences in stability, controllability, and sample quality.

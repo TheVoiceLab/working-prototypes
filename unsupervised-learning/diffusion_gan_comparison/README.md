@@ -57,5 +57,5 @@ A modern, non‑adversarial generative method based on iterative denoising.
 Included because:
 - They avoid adversarial instability  
 - They produce high‑fidelity, diverse samples  
-- They represent the current state of the art  
+- They may not look like real digits  
 
