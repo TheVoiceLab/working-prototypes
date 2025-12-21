@@ -1,0 +1,33 @@
+# PyCharm
+.idea/
+*.iml
+
+# Virtual environment
+venv/
+ENV/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Logs
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Model weights
+*.pth
+*.pt
+
+# Images
+*.png
+*.jpg
+*.jpeg
