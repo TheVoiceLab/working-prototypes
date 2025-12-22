@@ -30,9 +30,9 @@ class CGan_DigitGen:
         self.D_LR = 0.0001
         self.EPOCHS = 100  # Small data needs more epochs to converge
         self.DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-        self.OUT_DIR = "../data/cgan_generated_images"
+        self.OUT_DIR = "../output/cgan_generated_images"
         os.makedirs(self.OUT_DIR, exist_ok=True)
-        self.MODEL_DIR = "../data/cgan_model_checkpoints"
+        self.MODEL_DIR = "../output/cgan_model_checkpoints"
         os.makedirs(self.MODEL_DIR, exist_ok=True)
     # ============================================================
     # Data Preparation
@@ -200,7 +200,7 @@ class CGan_DigitGen:
                     noise = torch.randn(64, project.Z_DIM, 1, 1).to(project.DEVICE)
                     labels = torch.full((64,), test_label, dtype=torch.long).to(project.DEVICE)
                     samples = loaded_gen(noise, labels)
-                    vutils.save_image(samples, f"../data/cgan_gen_{test_label}.png", normalize=True)
+                    vutils.save_image(samples, f"../output/cgan_gen_{test_label}.png", normalize=True)
                     print(f"Successfully generated {test_label}s from loaded model!")
         else:
             print("No weights found. Please run training first.")
