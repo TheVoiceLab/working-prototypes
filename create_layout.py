@@ -1,10 +1,7 @@
 import os
 
 PROJECT_STRUCTURE = [
-    "src/day01",
-    "src/day02",
-    "src/day03",
-    "notebooks",
+    "src/",
     "data/raw",
     "data/processed",
     "tests",
