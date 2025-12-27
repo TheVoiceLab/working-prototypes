@@ -13,6 +13,57 @@ import os
 class ConditionalUNet(nn.Module):
     def __init__(self, num_classes, label_emd_dim, image_size):
         super().__init__()
+        self.image_size = image_size
+        self.label_emb = nn.Embedding(num_classes, label_emd_dim)
+
+        # Initial projection of time/label into a common embedding space
+        self.cond_proj = nn.Sequential(
+            nn.Linear(label_emd_dim + 1, 128),
+            nn.ReLU(),
+            nn.Linear(128, 128),
+        )
+
+        # Downsampling
+        self.down1 = nn.Conv2d(1, 64, 3, padding=1)
+        self.down2 = nn.Conv2d(64, 128, 4, stride=2, padding=1)
+
+        # Middle
+        self.mid = nn.Sequential(
+            nn.Conv2d(128, 128, 3, padding=1),
+            nn.ReLU(),
+            nn.Conv2d(128, 128, 3, padding=1)
+        )
+
+        # Upsampling with Skip Connections
+        self.up1 = nn.ConvTranspose2d(128, 64, 4, stride=2, padding=1)
+        self.up_conv = nn.Conv2d(128, 64, 3, padding=1)  # 64 (up1) + 64 (skip)
+        self.out = nn.Conv2d(64, 1, 3, padding=1)
+
+    def forward(self, x, t, labels):
+        # 1. Create conditioning vector
+        t_emb = t.float().view(-1, 1) / 300.0  # Normalize time
+        l_emb = self.label_emb(labels)
+        cond = self.cond_proj(torch.cat([t_emb, l_emb], dim=-1))
+        cond = cond.view(-1, 128, 1, 1)  # Prep for broadcast
+
+        # 2. Down pass
+        d1 = torch.relu(self.down1(x))
+        d2 = torch.relu(self.down2(d1))
+
+        # 3. Mid pass + Condition injection
+        m = self.mid(d2) + cond  # Inject labels here!
+
+        # 4. Up pass with Skip Connection
+        u1 = torch.relu(self.up1(m))
+        # Concatenate u1 with d1 (the skip connection)
+        u_combined = torch.cat([u1, d1], dim=1)
+        u2 = torch.relu(self.up_conv(u_combined))
+
+        return self.out(u2)
+
+class ConditionalUNet1(nn.Module):
+    def __init__(self, num_classes, label_emd_dim, image_size):
+        super().__init__()
         self.label_emb = nn.Embedding(num_classes, label_emd_dim)
         self.image_size = image_size
         self.down1 = nn.Sequential(
@@ -56,7 +107,7 @@ class DiffusionDemo:
         self.BATCH_SIZE = 64
         self.IMG_SIZE = 28
         self.NUM_CLASSES = 10
-        self.LABEL_EMB_DIM = 32
+        self.LABEL_EMB_DIM = 128 #fix random shape
         self.TIMESTEPS = 300
         self.LR = 1e-4
         self.EPOCHS = 100
