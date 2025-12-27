@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.export.pt2_archive.constants import MODELS_DIR
+
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader, Subset
 import torchvision.utils as vutils
