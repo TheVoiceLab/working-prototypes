@@ -1,9 +1,8 @@
 # Projects Descriptions
 
-Below is a list of working projects that demonstrates the creation work we have been developing at comcast AI lab.
-The workspace had been optimized for demo with blackwell RTX5090 GPU, though a few of them run better with H100.
-However, you can also use CPU to test the code outhe model reference part should be ok only the trainning part can be very slow.
-requirements.cpu.txt has CPU version configuration.
+The following list of active projects highlights the research and development currently underway at the Comcast AI Lab.
+
+All project datasets and model architectures have been specifically optimized for the NVIDIA RTX 5090 (Blackwell) to maximize throughput and efficiency. While CPU execution is supported for testing and inference, please note that training on a CPU is not recommended for production use due to significant performance constraints. For environments lacking a discrete GPU, please utilize the requirements.cpu.txt configuration file for setup."
 
 ### Project 1 Comparative Study of cGAN, WGAN‑GP, and Diffusion Models
 
