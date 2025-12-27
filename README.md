@@ -1,33 +1,17 @@
 # Projects Descriptions
 
-The following list of active projects highlights the research and development currently underway at the Comcast AI Lab.
+This suite of projects extends our previous research and innovations. The model architectures and datasets were specifically engineered for development on the NVIDIA RTX 5090 (Blackwell) to maximize performance. While the code supports training and inference on a CPU, please be aware that training may take several days due to hardware limitations. If a discrete GPU is unavailable, use the requirements.cpu.txt file for your environment setup.
+## Project 1: Comparative Study of Generative Image Models
 
-All project datasets and model architectures have been specifically optimized for the NVIDIA RTX 5090 (Blackwell) to maximize throughput and efficiency. While CPU execution is supported for testing and inference, please note that training on a CPU is not recommended for production use due to significant performance constraints. For environments lacking a discrete GPU, please utilize the requirements.cpu.txt configuration file for setup."
+**Environment:** PyTorch  
 
-### Project 1 Comparative Study of cGAN, WGAN‑GP, and Diffusion Models
+**Models Trained:** Conditional GAN (cGAN), Wasserstein GAN (WGAN-GP), Diffusion Models
 
-## [Unsupervised Generative Models] Comparative Study of cGAN, WGAN‑GP, and Diffusion Models
-This project implements and compares three major generative modeling approaches—**Conditional GAN (cGAN)**, **Wasserstein GAN with Gradient Penalty (WGAN‑GP)**, and **Diffusion Models**—to understand how different architectures learn data distributions, handle conditioning, and produce synthetic images.
+**Focuse Areas:** Model Stability, Interaction Between Label and Noise Dimenstions
 
-All models are trained on the same dataset under consistent settings to highlight differences in stability, controllability, and sample quality.
+**Project Directory:** [`unsupervised-learning/diffusion_gan_comparison`](./unsupervised-learning/diffusion_gan_comparison)
 
-<table border="0">
-  <tr>
-    <td align="center">
-      <img src="./unsupervised-learning/diffusion_gan_comparison/data/img.png" width="250"><br>
-      <sub><b>Conditional GAN</b></sub>
-    </td><td width = 5 />
-    <td align="center">
-      <img src="./unsupervised-learning/diffusion_gan_comparison/data/pro_epoch_30.png" width="250"><br>
-      <sub><b>WGAN‑GP</b></sub>
-    </td><td width = 5 />
-    <td align="center">
-      <img src="./unsupervised-learning/diffusion_gan_comparison/data/img_1.png" width="250"><br>
-      <sub><b>Diffusion Model</b></sub>
-    </td>
-  </tr>
-</table>
 
----
+## Project 2: User Query Prediction and EOS Detection
 
-## [Supervised Deep Learning] Guidance Queries for Audio Cache
+**Environment:** PyTorch, SnowFlake  
