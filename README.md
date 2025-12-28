@@ -12,6 +12,12 @@ This suite of projects extends our previous research and innovations. The model 
 **Project Directory:** [`unsupervised-learning/diffusion_gan_comparison`](./unsupervised-learning/diffusion_gan_comparison)
 
 
-## Project 2: User Query Prediction and EOS Detection
+## Project 2: User Query Prediction and EOS Detection (model part)
 
-**Environment:** PyTorch, SnowFlake  
+**Environment:** PyTorch 
+
+**Models Trained:** Distance and Vocabulary Embeddings, PyTorch Transformer
+
+**Focuse Areas:** Probability Loop, Causal Mask
+
+**Project Directory:** [`generative/sentence_prediction`](./generative/sentence_prediction)
