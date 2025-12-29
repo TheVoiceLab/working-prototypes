@@ -1,7 +1,20 @@
-torch
-torchvision
-torchcodec
-torchaudio
-numpy
-pandas
-tqdm
+--index-url https://download.pytorch.org/whl/nightly/cu128
+--extra-index-url https://pypi.org/simple
+
+# Core PyTorch Nightly (High Performance)
+torch>=2.6.0.dev
+torchvision>=0.21.0.dev
+torchaudio>=2.6.0.dev
+
+# Audio Backend & Math (Replaces missing torchcodec)
+soundfile>=0.12.1
+numpy>=1.26.0
+
+# Visualization & Confusion Matrix
+scikit-learn>=1.4.0
+matplotlib>=3.8.0
+seaborn>=0.13.0
+
+# Utilities
+tqdm>=4.67.1
+pandas>=2.3.3
