@@ -21,3 +21,14 @@ This suite of projects extends our previous research and innovations. The model 
 **Focuse Areas:** Probability Loop, Causal Mask
 
 **Project Directory:** [`generative/sentence_prediction`](./generative/sentence_prediction)
+
+
+## Project 3: Chronological Audio Classification (Audio Cache)
+
+**Environment:** PyTorch, 
+
+**Models Trained:** CNN, ResNet (CNN), Wav2Vect (Transformer)
+
+**Focuse Areas:** Evaluated performance gains by migrating from traditional convolutional architectures to state-of-the-art transformer-based self-supervised models.
+
+**Project Directory:** [`supervised`](supervised)

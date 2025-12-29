@@ -1,4 +1,24 @@
-torch
-torchvision
-numpy
-pandas
+--index-url https://download.pytorch.org/whl/nightly/cpu
+--extra-index-url https://pypi.org/simple
+
+# Core PyTorch Nightly (CPU - Python 3.10 Compatible)
+# The dev versions below will automatically pull the cp310 wheels
+torch>=2.6.0.dev
+torchvision>=0.21.0.dev
+torchaudio>=2.6.0.dev
+
+# Audio Backend & Math
+soundfile>=0.12.1
+numpy>=1.26.0
+
+# Visualization & Confusion Matrix
+scikit-learn>=1.4.0
+matplotlib>=3.8.0
+seaborn>=0.13.0
+
+# Utilities
+tqdm>=4.67.1
+pandas>=2.3.3
+
+# Microphone & Real-time Testing
+sounddevice>=0.4.6
