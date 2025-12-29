@@ -1,4 +1,7 @@
 torch
 torchvision
+torchcodec
+torchaudio
 numpy
 pandas
+tqdm
