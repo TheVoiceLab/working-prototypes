@@ -1,15 +1,19 @@
---index-url https://download.pytorch.org/whl/nightly/cpu
+--index-url https://download.pytorch.org/whl/nightly/cu128
 --extra-index-url https://pypi.org/simple
 
-# Core PyTorch Nightly (CPU - Python 3.10 Compatible)
-# The dev versions below will automatically pull the cp310 wheels
+# Core PyTorch Nightly
 torch>=2.6.0.dev
 torchvision>=0.21.0.dev
 torchaudio>=2.6.0.dev
 
-# Audio Backend & Math
+# Audio Backend (Critical for loading .wav files on Windows)
 soundfile>=0.12.1
+
+# Data & Utilities
 numpy>=1.26.0
+pandas>=2.3.3
+tqdm>=4.67.1
+
 
 # Visualization & Confusion Matrix
 scikit-learn>=1.4.0
