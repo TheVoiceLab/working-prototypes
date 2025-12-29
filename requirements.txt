@@ -18,3 +18,6 @@ seaborn>=0.13.0
 # Utilities
 tqdm>=4.67.1
 pandas>=2.3.3
+
+# Microphone & Real-time Testing
+sounddevice>=0.4.6
