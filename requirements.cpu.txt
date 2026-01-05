@@ -22,3 +22,11 @@ pandas>=2.3.3
 
 # Microphone & Real-time Testing
 sounddevice>=0.4.6
+
+# AI, LLM & Embeddings
+openai>=1.58.1
+sentence-transformers>=2.2.2
+faiss-cpu>=1.7.4
+
+# Optional for noise detection
+hdbscan>=0.8.33

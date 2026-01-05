@@ -29,6 +29,24 @@ This suite of projects extends our previous research and innovations. The model 
 
 **Models Trained:** CNN, ResNet (CNN), Wav2Vect (Transformer)
 
-**Focuse Areas:** Evaluated performance gains by migrating from traditional convolutional architectures to state-of-the-art transformer-based self-supervised models.
+**Focuse Areas:** Evaluated performance gains by migrating from traditional convolutional architectures to state-of-the-art Wave2Vec transformer-based self-supervised models.
+
+| Model          | Accuracy  | Avg Precision | Avg Recall |
+|----------------|-----------|---------------|------------|
+| SpeechCNN      | 97.37%    | 97.38%        | 97.37%     |
+| ResNet18_Opt   | 97.57%    | 97.59%        | 97.55%     |
+| **Transformer**| **98.87%**| **98.87%**    | **98.86%** |
 
 **Project Directory:** [`supervised`](supervised)
+
+## Project 4: Scalable NLU Audit via Semantic Compression
+
+**Environment:** PyTorch, OpenAI, Hybrid Pipeline (Classical ML + Generative AI)
+
+**Models Trained:** SentenceTransformer (SBERT), MiniBatchKMeans, GPT-5o-mini (Audit)
+
+**Focuse Areas:** Designed a high-throughput pipeline to process 1M+ utterances by condensing raw text into 100 behavioral archetypes, reducing LLM token costs by 99.9%.
+Hybrid Analysis Engine: Combined local GPU-accelerated embeddings (PyTorch) for large-scale data structuring with LLM-as-a-Judge logic for nuanced semantic auditing.
+
+**Project Directory:** [`semantic_compression_audit`](semantic_compression_audit)
+
