@@ -315,4 +315,3 @@ if __name__ == "__main__":
         print(result.intent.intent_name)
         print(result.confidence)
         print(result.method)
-        break
