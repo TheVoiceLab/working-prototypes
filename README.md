@@ -83,4 +83,13 @@ Hybrid Analysis Engine: Combined local GPU-accelerated embeddings (PyTorch) for 
 
 ## Project Demo 5: GPU/CPU Capacity Prediction and Planning (2017 - Present)
 
- <img src="capacity_planning/Figure_1.png" width="250"><br>
+**Environment:** PyTorch, ARIMA, Transformer
+
+**Business Needs:** The voice remote traffic was never constant. They carry clear minutely, hourly, daily, weekly and seaonsable patterns and is closely related to the hot TV shows on air.
+To predict the future user traffic plays an important role in determine machine resource (replicas, alerts) in our system. We use both traditional ARIMA and latest transformer models to do prediction.
+
+We can not release business data. The data in this demo was synthetic data from public available databases.
+
+**Project Directory:** [`capacity_planing`](capacity_planing)
+
+ <img src="capacity_planing/Figure_1.png" width="600"><br>
