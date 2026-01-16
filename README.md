@@ -81,14 +81,30 @@ Hybrid Analysis Engine: Combined local GPU-accelerated embeddings (PyTorch) for 
 
 **Project Directory:** [`adv_analysis_utterance_classifier`](adv_analysis_utterance_classifier)
 
+Excution Result:
+    
+    User utterance: "Wi - Fi issues"
+    Intent: internet_troubleshoot
+    Confidence: 0.9
+    Path: faiss+rag+llm
+
+    User utterance: "sure"
+    Intent: small_talk_confirmation_yes
+    Confidence: 1.0000001
+    Path: short utterance vec matching
+
+    User utterance: "I have to do everything stay on the phone make a call I don't have to tell you what to do you're the 1 who you"
+    Intent: no match
+    Confidence: 0.33603161573410034
+    Path: unknown (low_similarity)
+
 ## Project Demo 5: GPU/CPU Capacity Prediction and Planning (2017 - Present)
 
 **Environment:** PyTorch, ARIMA, Transformer
 
-**Business Needs:** The voice remote traffic was never constant. They carry clear minutely, hourly, daily, weekly and seaonsable patterns and is closely related to the hot TV shows on air.
-To predict the future user traffic plays an important role in determine machine resource (replicas, alerts) in our system. We use both traditional ARIMA and latest transformer models to do prediction.
+**Business Needs:** Voice remote traffic is highly variable, exhibiting clear minute-by-minute, hourly, daily, weekly, and seasonal patterns. It is also closely tied to popular TV shows airing at the time. Accurately predicting future user traffic is critical for determining system resources such as replicas and alerts. To achieve this, we leverage both traditional ARIMA models and modern transformer-based models for traffic forecasting.
 
-We can not release business data. The data in this demo was synthetic data from public available databases.
+For privacy reasons, the data used in this demo is synthetic and derived from publicly available datasets rather than real business data.
 
 **Project Directory:** [`capacity_planing`](capacity_planing)
 

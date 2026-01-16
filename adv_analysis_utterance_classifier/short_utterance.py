@@ -203,7 +203,7 @@ Respond in JSON only:
 {{"intent_id": "...", "confidence": 0.0}}
 """
         def parse_llm_json(text: str) -> dict:
-            text = text.strip()
+            text = text.strip().replace('```json','').replace('```','')
             print(f"====>{text}")
 
             try:
@@ -276,13 +276,15 @@ if __name__ == "__main__":
 
     # --- Test utterances ---
     tests = [
+        "I have to do everything stay on the phone make a call I don't have to tell you what to do you're the 1 who you",
+        "sure",
+        "Wi - Fi issues",
         "some random stuff",
         "program this remote",
         "I don't have internet",
         "sure",
         "no way",
         "talk to a customer service",
-        "I have to do everything stay on the phone make a call I don't have to tell you what to do you're the 1 who you",
         "re on the 15 years going for 8 to 12 hours a day make a phone call",
         "technical issue",
         "getting a error code rdk d1000 on all my TVs",
@@ -312,6 +314,8 @@ if __name__ == "__main__":
 
     for t in tests:
         result = classifier.classify(t)
+        print(f'Utterance is "{t}"')
         print(result.intent.intent_name)
         print(result.confidence)
         print(result.method)
+        break
