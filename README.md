@@ -3,7 +3,7 @@
 ### This suite of projects extends our previous research and innovations during daily work. 
 
 The model architectures and datasets were specifically engineered for development on the NVIDIA RTX 5090 (Blackwell) to maximize performance. While the code supports training and inference on a CPU, please be aware that training may take several days due to hardware limitations. If a discrete GPU is unavailable, use the requirements.cpu.txt file for your environment setup.
-## Project 1: Comparative Study of Generative Image Models
+## Project Demo 1: Comparative Study of Generative Image Models (2019-2023)
 
 **Environment:** PyTorch
 
@@ -15,8 +15,24 @@ The model architectures and datasets were specifically engineered for developmen
 
 **Project Directory:** [`unsupervised-learning/diffusion_gan_comparison`](./unsupervised-learning/diffusion_gan_comparison)
 
+<table border="0">
+  <tr>
+    <td align="center">
+      <img src="unsupervised-learning/diffusion_gan_comparison/data/img.png" width="250"><br>
+      <sub><b>Conditional GAN</b></sub>
+    </td><td width = 5 />
+    <td align="center">
+      <img src="unsupervised-learning/diffusion_gan_comparison/data/pro_epoch_30.png" width="250"><br>
+      <sub><b>WGAN‑GP</b></sub>
+    </td><td width = 5 />
+    <td align="center">
+      <img src="unsupervised-learning/diffusion_gan_comparison/data/img_1.png" width="250"><br>
+      <sub><b>Diffusion Model</b></sub>
+    </td>
+  </tr>
+</table>
 
-## Project 2: User Query Prediction and EOS Detection (model part)
+## Project Demo 2: User Query Prediction and EOS Detection (model part) (2019-Present)
 
 **Environment:** PyTorch 
 
@@ -29,7 +45,7 @@ The model architectures and datasets were specifically engineered for developmen
 **Project Directory:** [`generative/sentence_prediction`](./generative/sentence_prediction)
 
 
-## Project 3: Chronological Audio Classification (Audio Cache)
+## Project Demo 3: Chronological Audio Classification (Audio Cache) (2017-Present)
 
 **Environment:** PyTorch, 
 
@@ -50,7 +66,7 @@ For demo purposes, we use publicly available image data to stand in for the actu
 
 **Project Directory:** [`supervised`](supervised)
 
-## Project 4: Scalable NLU Audit via Semantic Compression
+## Project Demo 4: Scalable NLU Audit via Semantic Compression (2025 - Present)
 
 **Environment:** PyTorch, OpenAI, Hybrid Pipeline (Classical ML + Generative AI)
 
@@ -65,3 +81,6 @@ Hybrid Analysis Engine: Combined local GPU-accelerated embeddings (PyTorch) for 
 
 **Project Directory:** [`adv_analysis_utterance_classifier`](adv_analysis_utterance_classifier)
 
+## Project Demo 5: GPU/CPU Capacity Prediction and Planning (2017 - Present)
+
+ <img src="capacity_planning/Figure_1.png" width="250"><br>
