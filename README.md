@@ -63,5 +63,5 @@ To address this, we built a vector-based retrieval system to narrow the search s
 **Focuse Areas:** Designed a high-throughput pipeline to process 1M+ utterances by condensing raw text into 100 behavioral archetypes, reducing LLM token costs by 99.9%.
 Hybrid Analysis Engine: Combined local GPU-accelerated embeddings (PyTorch) for large-scale data structuring with LLM-as-a-Judge logic for nuanced semantic auditing.
 
-**Project Directory:** [`semantic_compression_audit`](semantic_compression_audit)
+**Project Directory:** [`adv_analysis_utterance_classifier`](adv_analysis_utterance_classifier)
 
