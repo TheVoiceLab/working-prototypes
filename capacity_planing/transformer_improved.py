@@ -1,207 +1,155 @@
-import numpy as np
 import pandas as pd
+import numpy as np
 import torch
 import torch.nn as nn
+import matplotlib.pyplot as plt
 from torch.utils.data import Dataset, DataLoader
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_absolute_error, mean_squared_error
-import matplotlib.pyplot as plt
-
-# --------------------------------------------------
-# 1. LOAD & PREP DATA
-# --------------------------------------------------
-def load_data(path="remote_traffic_4year_full.csv"):
-    df = pd.read_csv(path, parse_dates=["time"])
-    df = df.sort_values("time").set_index("time")
-
-    df["traffic"] = pd.to_numeric(df["traffic"], errors="coerce")
-    df = df.dropna(subset=["traffic"])
-
-    # time features
-    df["hour"] = df.index.hour
-    df["dow"] = df.index.dayofweek
-
-    df["hour_sin"] = np.sin(2*np.pi*df["hour"]/24)
-    df["hour_cos"] = np.cos(2*np.pi*df["hour"]/24)
-    df["dow_sin"]  = np.sin(2*np.pi*df["dow"]/7)
-    df["dow_cos"]  = np.cos(2*np.pi*df["dow"]/7)
-
-    return df
 
 
-# --------------------------------------------------
-# 2. DATASET (LOG-DELTA TARGET)
-# --------------------------------------------------
-class TrafficDataset(Dataset):
-    def __init__(self, df, features, seq_len=168):
+# -----------------------------
+# 1. LOAD & HOURLY AGGREGATION (Max Minute Value)
+# -----------------------------
+def get_processed_data(path="remote_traffic_4year_full.csv"):
+    df = pd.read_csv(path, parse_dates=["time"], low_memory=False)
+
+    # Clean and Cast
+    for col in ["traffic", "imdb_factor", "sub_multiplier"]:
+        df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    # 1-Hour Bucket: Max traffic per hour
+    df["hour_idx"] = df["time"].dt.floor("h")
+    hourly = df.groupby("hour_idx").agg({
+        "traffic": "max",  # Hourly Peak
+        "imdb_factor": "mean",
+        "sub_multiplier": "mean",
+        "hour_idx": "first"
+    }).reset_index(drop=True)
+
+    # Features
+    hourly["hour_of_day"] = hourly["hour_idx"].dt.hour
+    hourly["day_of_week"] = hourly["hour_idx"].dt.dayofweek
+
+    # Lag features
+    for l in [1, 2, 24, 168]:
+        hourly[f"lag_{l}"] = hourly["traffic"].shift(l)
+
+    return hourly.dropna()
+
+
+# -----------------------------
+# 2. FAST DATASET (Tensor-based)
+# -----------------------------
+class FastTSDataset(Dataset):
+    def __init__(self, features, targets, seq_len=168, pred_len=24):
+        self.x = torch.tensor(features, dtype=torch.float32)
+        self.y = torch.tensor(targets, dtype=torch.float32)
         self.seq_len = seq_len
-        self.X = df[features].values.astype(np.float32)
-
-        self.y = df["traffic"].values.astype(np.float32)
-        self.log_y = np.log(self.y + 1e-6)
+        self.pred_len = pred_len
 
     def __len__(self):
-        return len(self.y) - self.seq_len - 1
+        return len(self.x) - self.seq_len - self.pred_len + 1
 
     def __getitem__(self, idx):
-        x = self.X[idx:idx + self.seq_len]
-
-        # log-delta target
-        y_delta = (
-            self.log_y[idx + self.seq_len + 1]
-            - self.log_y[idx + self.seq_len]
-        )
-
-        last_value = self.y[idx + self.seq_len]
-
-        return (
-            torch.tensor(x),
-            torch.tensor(y_delta),
-            torch.tensor(last_value)
-        )
+        return self.x[idx: idx + self.seq_len], self.y[idx + self.seq_len: idx + self.seq_len + self.pred_len]
 
 
-# --------------------------------------------------
+# -----------------------------
 # 3. TRANSFORMER MODEL
-# --------------------------------------------------
-class TransformerModel(nn.Module):
-    def __init__(self, input_dim, d_model=64, nhead=4, num_layers=3):
+# -----------------------------
+class TransformerMultiStep(nn.Module):
+    def __init__(self, input_dim, d_model=64, nhead=8, num_layers=2, pred_len=24):
         super().__init__()
-
         self.input_proj = nn.Linear(input_dim, d_model)
-
         encoder_layer = nn.TransformerEncoderLayer(
-            d_model=d_model,
-            nhead=nhead,
-            dim_feedforward=256,
-            dropout=0.1,
-            batch_first=True
+            d_model=d_model, nhead=nhead, dim_feedforward=256, dropout=0.1, batch_first=True
         )
-
-        self.encoder = nn.TransformerEncoder(
-            encoder_layer, num_layers=num_layers
-        )
-
-        self.fc = nn.Linear(d_model, 1)
+        self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
+        self.fc_out = nn.Linear(d_model, pred_len)
 
     def forward(self, x):
         x = self.input_proj(x)
-        x = self.encoder(x)
-        return self.fc(x[:, -1]).squeeze(-1)
+        x = self.transformer(x)
+        return self.fc_out(x[:, -1, :])  # Use the last context window to predict future
 
 
-# --------------------------------------------------
-# 4. TRAINING
-# --------------------------------------------------
-def train_epoch(model, loader, optimizer, device):
+# -----------------------------
+# 4. MAIN EXECUTION
+# -----------------------------
+def main():
+    # Setup
+    seq_len, pred_len = 168, 24
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    data = get_processed_data()
+    feature_cols = ["hour_of_day", "day_of_week", "imdb_factor", "sub_multiplier", "lag_1", "lag_2", "lag_24"]
+
+    # Split (3 years train, 1 year test)
+    split_idx = int(len(data) * 0.75)
+    train_df, test_df = data.iloc[:split_idx], data.iloc[split_idx:]
+
+    # Scaling
+    sc_x, sc_y = StandardScaler(), StandardScaler()
+    train_x = sc_x.fit_transform(train_df[feature_cols])
+    train_y = sc_y.fit_transform(train_df[["traffic"]]).flatten()
+
+    test_x = sc_x.transform(test_df[feature_cols])
+    test_y = sc_y.transform(test_df[["traffic"]]).flatten()
+
+    # Loaders
+    train_loader = DataLoader(FastTSDataset(train_x, train_y), batch_size=64, shuffle=True)
+    test_ds = FastTSDataset(test_x, test_y)
+    test_loader = DataLoader(test_ds, batch_size=64, shuffle=False)
+
+    # Train
+    model = TransformerMultiStep(len(feature_cols)).to(device)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=0.001)
+    criterion = nn.MSELoss()
+
+    print("Starting fast training...")
     model.train()
-    total_loss = 0
+    for epoch in range(20):
+        for xb, yb in train_loader:
+            xb, yb = xb.to(device), yb.to(device)
+            optimizer.zero_grad()
+            loss = criterion(model(xb), yb)
+            loss.backward()
+            optimizer.step()
+        if (epoch + 1) % 5 == 0: print(f"Epoch {epoch + 1} done, loss {loss}")
 
-    for x, y_delta, _ in loader:
-        x = x.to(device)
-        y_delta = y_delta.to(device)
-
-        optimizer.zero_grad()
-        pred = model(x)
-
-        loss = nn.MSELoss()(pred, y_delta)
-        loss.backward()
-
-        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
-        optimizer.step()
-
-        total_loss += loss.item()
-
-    return total_loss / len(loader)
-
-
-# --------------------------------------------------
-# 5. EVALUATION (RECONSTRUCT TRAFFIC)
-# --------------------------------------------------
-def evaluate(model, loader, device):
+    # -----------------------------
+    # 5. ERROR CALCULATION & PLOT
+    # -----------------------------
     model.eval()
     preds, actuals = [], []
-
     with torch.no_grad():
-        for x, y_delta, last_val in loader:
-            x = x.to(device)
-            y_delta = y_delta.to(device)
+        for xb, yb in test_loader:
+            out = model(xb.to(device)).cpu().numpy()
+            preds.append(out)
+            actuals.append(yb.numpy())
 
-            pred_delta = model(x)
+    # Reconstruct arrays (flattening for point-by-point comparison)
+    y_pred_rescaled = sc_y.inverse_transform(np.concatenate(preds).reshape(-1, 1)).flatten()
+    y_true_rescaled = sc_y.inverse_transform(np.concatenate(actuals).reshape(-1, 1)).flatten()
 
-            pred = last_val * torch.exp(pred_delta.cpu())
-            actual = last_val * torch.exp(y_delta.cpu())
+    mae = mean_absolute_error(y_true_rescaled, y_pred_rescaled)
+    rmse = np.sqrt(mean_squared_error(y_true_rescaled, y_pred_rescaled))
 
-            preds.extend(pred.numpy())
-            actuals.extend(actual.numpy())
+    print(f"\n--- Results ---")
+    print(f"MAE: {mae:.2f}")
+    print(f"RMSE: {rmse:.2f}")
 
-    preds = np.array(preds)
-    actuals = np.array(actuals)
-
-    mae = mean_absolute_error(actuals, preds)
-    rmse = np.sqrt(mean_squared_error(actuals, preds))
-
-    return mae, rmse, preds, actuals
-
-
-# --------------------------------------------------
-# 6. MAIN PIPELINE
-# --------------------------------------------------
-def main():
-    df = load_data()
-
-    FEATURES = [
-        "hour_sin", "hour_cos",
-        "dow_sin", "dow_cos"
-    ]
-
-    # normalize features
-    scaler = StandardScaler()
-    df[FEATURES] = scaler.fit_transform(df[FEATURES])
-
-    # train / test split (last year = test)
-    split_time = df.index.max() - pd.DateOffset(years=1)
-    train_df = df[df.index < split_time]
-    test_df  = df[df.index >= split_time]
-
-    train_ds = TrafficDataset(train_df, FEATURES)
-    test_ds  = TrafficDataset(test_df, FEATURES)
-
-    train_loader = DataLoader(train_ds, batch_size=64, shuffle=True)
-    test_loader  = DataLoader(test_ds, batch_size=64, shuffle=False)
-
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-
-    model = TransformerModel(input_dim=len(FEATURES)).to(device)
-    optimizer = torch.optim.AdamW(model.parameters(), lr=1e-4)
-
-    # training
-    for epoch in range(30):
-        loss = train_epoch(model, train_loader, optimizer, device)
-        if (epoch + 1) % 5 == 0:
-            print(f"Epoch {epoch+1}/30, Loss: {loss:.6f}")
-
-    # evaluation
-    mae, rmse, preds, actuals = evaluate(model, test_loader, device)
-
-    print("\nTransformer (Log-Delta)")
-    print("MAE:", mae)
-    print("RMSE:", rmse)
-
-    # plot last 14 days
-    plt.figure(figsize=(14,5))
-    plt.plot(actuals[-336:], label="Actual")
-    plt.plot(preds[-336:], label="Predicted")
-    plt.title("Traffic Forecast – Transformer (Log-Delta)")
-    plt.xlabel("Hour")
-    plt.ylabel("Traffic")
+    # Plot Last 14 Days
+    plt.figure(figsize=(12, 5))
+    # We show only a slice to keep the plot readable
+    plt.plot(y_true_rescaled[-336:], label="Actual (Peak)", alpha=0.8)
+    plt.plot(y_pred_rescaled[-336:], label="Transformer Prediction", linestyle="--")
+    plt.title("Traffic Forecast: Last 14 Days (Hourly Max)")
     plt.legend()
-    plt.grid(alpha=0.3)
+    plt.grid(True, alpha=0.3)
     plt.show()
 
 
-# --------------------------------------------------
-# 7. RUN
-# --------------------------------------------------
 if __name__ == "__main__":
     main()
