@@ -102,10 +102,17 @@ Excution Result:
 
 **Environment:** PyTorch, ARIMA, Transformer
 
-**Business Needs:** Voice remote traffic is highly variable, exhibiting clear minute-by-minute, hourly, daily, weekly, and seasonal patterns. It is also closely tied to popular TV shows airing at the time. Accurately predicting future user traffic is critical for determining system resources such as replicas and alerts. To achieve this, we leverage both traditional ARIMA models and modern transformer-based models for traffic forecasting.
+**Business Needs:** Voice remote traffic is highly variable, exhibiting clear minute-by-minute, hourly, daily, weekly, and seasonal patterns. 
+It is also closely tied to popular TV shows airing at the time. 
+Accurately predicting future user traffic is critical for determining system resources such as replicas and alerts. 
+To achieve this, we leverage both traditional ARIMA models and modern transformer-based models for traffic forecasting.
 
-For privacy reasons, the data used in this demo is synthetic and derived from publicly available datasets rather than real business data.
+For privacy reasons, the data used in this demo is synthetic and derived from publicly available datasets rather than real production data.
 
 **Project Directory:** [`capacity_planing`](capacity_planing)
 
- <img src="capacity_planing/Figure_1.png" width="600"><br>
+ <img src="capacity_planing/Figure_1.png" width="1000"><br>
+ 
+ <img src="capacity_planing/3models.png" width="1000"><br>
+
+ <img src="capacity_planing/transformer.png" width="1000"><br>
