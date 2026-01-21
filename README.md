@@ -2,8 +2,7 @@
 
 ### This suite of projects extends our previous research and innovations during daily work. 
 
-The model architectures and datasets were specifically engineered for development on the NVIDIA RTX 5090 (Blackwell) to maximize performance. While the code supports training and inference on a CPU, please be aware that training may take several days due to hardware limitations. If a discrete GPU is unavailable, use the requirements.cpu.txt file for your environment setup.
-
+I have downsized the neural network architectures and datasets in these demos so users can perform training and inference efficiently on an NVIDIA RTX 5090 (Blackwell) GPU for optimal performance. While CPU training and inference are supported, please note that training may take several hours or even days due to hardware limitations. If a discrete GPU is unavailable, use the requirements.cpu.txt file to set up your environment.
 
 ## Project Demo 1: User Query Prediction and EOS Detection (model part) (2019-Present)
 
