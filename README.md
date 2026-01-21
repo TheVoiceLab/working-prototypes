@@ -43,7 +43,7 @@ The model architectures and datasets were specifically engineered for developmen
 **Focuse Areas:** Probability Loop, Causal Mask
 
 **Project Directory:** [`generative/sentence_prediction`](./generative/sentence_prediction)
-
+<img src="generative/sentence-complete.png" />
 
 ## Project Demo 3: Chronological Audio Classification (Audio Cache) (2017-Present)
 

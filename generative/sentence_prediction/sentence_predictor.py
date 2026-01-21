@@ -314,4 +314,4 @@ if __name__ == "__main__":
 
             print(f'=> {out["full_text"]}')
             print(f'   Confidence: {out["average_confidence"]:.2%}')
-            print(f'   Expected streaming delay: {leftovertime} ms')
+            print(f'   Expected streaming time to complete: {leftovertime}I ms')
