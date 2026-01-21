@@ -89,7 +89,7 @@ For privacy reasons, the data used in this demo is synthetic and derived from pu
 
  <img src="capacity_planing/transformer.png" width="1000"><br>
 
-## Project Demo 5: Comparative Study of Generative Image Models (2019-2023)
+## Project Demo 5: Comparative Study of Generative Audio(Spectrum) Models (2019-2023)
 
 **Environment:** PyTorch
 
