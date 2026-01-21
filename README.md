@@ -105,7 +105,7 @@ Excution Result:
 **Business Needs:** Voice remote traffic is highly variable, exhibiting clear minute-by-minute, hourly, daily, weekly, and seasonal patterns. 
 It is also closely tied to popular TV shows airing at the time. 
 Accurately predicting future user traffic is critical for determining system resources such as replicas and alerts. 
-To achieve this, we leverage both traditional ARIMA models and modern transformer-based models for traffic forecasting.
+To achieve this, we leverage both traditional ARIMA (SARIMAX), Light GBM models and modern transformer-based models for traffic forecasting.
 
 For privacy reasons, the data used in this demo is synthetic and derived from publicly available datasets rather than real production data.
 
