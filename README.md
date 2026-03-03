@@ -117,3 +117,60 @@ For privacy reasons, the data used in this demo is synthetic and derived from pu
     </td>
   </tr>
 </table>
+
+
+## Project Demo 6: Static VS Dynamic Routing in LangGraph (2025-present)
+
+**Environment:** Langchain, Langgraph, Langchain-openai
+
+**Business Needs:** When building a LangGraph workflow, we often do not want to traverse every node in the graph. Instead, the system should dynamically determine which agent nodes to invoke based on the user’s input—typically decided by an LLM. In this scenario, routing is dynamic rather than fixed.
+
+In this example, the system includes more than ten skill-builder agents. An LLM first parses the user’s instruction and then dynamically routes the request to the most relevant agents to generate the desired output. The demonstration includes both static and dynamic routing mechanisms within the same system.
+
+**Focuse Areas:** Fan in, Fan out, Annotated fields
+
+**Project Directory:** [`dyanmic_routing`](dynamic_routing)
+
+<img src="dynamic_routing/skill-builder.png" width="800"><br>
+
+Sample Request:
+      
+      initial_state = {
+            "user_input": "Leon like to kick the seat on the schoolbus...",
+            "user_instruction": "My son understands the words but does not understand the plots",
+            "outputs": [],
+            "errors": []
+        }
+     
+Agents' Results:
+    
+    === Generated story ===
+    **Leon Kicks Up Adventure**  
+    
+    Once upon a time in the sunny town of Willow Creek, there was a cheeky little boy named Leon. 
+    Every morning, when he climbed aboard the bright yellow school bus, he had one favorite thing to do: kick the seat in front of him.  
+    
+    “Thump! Thump! Thump!” went his feet as ...
+    
+    === skill selector response ===
+    [ "story_retell_builder", "book_builder", "story_comprehension_builder", "prediction_builder", "logic_builder"]
+    
+    ========= skills selected by LLM: ['story_retell_builder', 'book_builder', 'story_comprehension_builder', 'prediction_builder', 'logic_builder'] =========
+    skill story_retell_builder has been activated.......................
+    skill book_builder has been activated.......................
+    skill story_comprehension_builder has been activated.......................
+    skill prediction_builder has been activated.......................
+    skill logic_builder has been activated.......................
+    
+    === All selected skills have finished. Merging. ===
+    
+    ========================================
+    FINAL OUTPUTS:
+    ✅ [story_retell_builder] Generated 1 page worksheet based on a story of 3118 letters following instruction: My son understands the words but does not understand the plots.
+    ✅ [book_builder] Generated 1 page worksheet based on a story of 3118 letters following instruction: My son understands the words but does not understand the plots.
+    ✅ [story_comprehension_builder] Generated 1 page worksheet based on a story of 3118 letters following instruction: My son understands the words but does not understand the plots.
+    ✅ [prediction_builder] Generated 1 page worksheet based on a story of 3118 letters following instruction: My son understands the words but does not understand the plots.
+    
+    ERRORS ENCOUNTERED:
+    ❌ logic_builder: soft error
+    ========================================
