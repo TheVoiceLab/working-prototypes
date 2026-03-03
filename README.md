@@ -125,7 +125,7 @@ For privacy reasons, the data used in this demo is synthetic and derived from pu
 
 **Business Needs:** When building a LangGraph workflow, we often do not want to traverse every node in the graph. Instead, the system should dynamically determine which agent nodes to invoke based on the user’s input—typically decided by an LLM. In this scenario, routing is dynamic rather than fixed.
 
-In this example, the system includes more than ten skill-builder agents. An LLM first parses the user’s instruction and then dynamically routes the request to the most relevant agents to generate the desired output. The demonstration includes both static and dynamic routing mechanisms within the same system.
+In this example, the system includes more than ten skill-builder agents. An LLM first parses the user’s instruction and then dynamically routes the request to the most relevant agents to generate the desired output. The demonstration includes both static (traditional nodes, edges, conditional edges) and dynamic routing mechanisms (dynamically build agents from repository, send and merge) within the same system.
 
 **Focuse Areas:** Fan in, Fan out, Annotated fields
 
