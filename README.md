@@ -119,7 +119,7 @@ For privacy reasons, the data used in this demo is synthetic and derived from pu
 </table>
 
 
-## Project Demo 6: Static VS Dynamic Routing in LangGraph (2025-present)
+## Project Demo 6: Dynamic Multi-Agent Orchestrator (LangGraph) (2025-present)
 
 **Environment:** Langchain, Langgraph, Langchain-openai
 
