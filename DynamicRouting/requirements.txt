@@ -1,0 +1,21 @@
+# LangGraph (Annotated state keys require >=1.2.0)
+langgraph>=1.0.10
+
+# LangChain core
+langchain>=1.0.0
+langchain-core>=1.0.0
+
+# LLM providers
+langchain-openai>=0.1.0
+openai>=1.14.3
+langchain-google-genai>=1.0.0
+google-generativeai>=0.7.0
+
+# LangSmith for experiment tracking
+langsmith>=0.1.0
+
+# Environment variable handling
+python-dotenv>=1.0.0
+
+# HTTP requests
+requests>=2.31.0
