@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agent-api-deployment           # Deployment name
+spec:
+  replicas: 2                          # Number of pods
+  selector:
+    matchLabels:
+      app: agent-api                   # Must match pod template labels
+  template:
+    metadata:
+      labels:
+        app: agent-api                 # Pod label used by Deployment & Service
+    spec:
+      containers:
+      - name: python-server            # Container name (can be different from pod label)
+        image: myapp:agent             # Your Docker image
+        ports:
+        - containerPort: 6600
+        env:
+        - name: openai-key
+          valueFrom:
+            secretKeyRef:
+              name: openai-key-secret  # Kubernetes secret
+              key: openai-key
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agent-api-service              # Service name
+spec:
+  type: NodePort                       # Expose on host port
+  selector:
+    app: agent-api                     # Must match pod label
+  ports:
+    - port: 6600                       # Service port inside cluster
+      targetPort: 6600                 # Container port
+      nodePort: 30660                  # Port accessible on localhost
