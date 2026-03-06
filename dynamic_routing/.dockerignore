@@ -1,0 +1,10 @@
+k8s.yaml
+.git
+.gitignore
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.venv
+node_modules
